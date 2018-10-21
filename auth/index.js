@@ -10,4 +10,13 @@ router.get('/', (req, res) => {
   })
 })
 
+// POST/auth/signup
+
+router.post('/signup', (req, res) => {
+  res.json({
+    message: 'You have signed up'
+  })
+})
+
+
 module.exports = router
