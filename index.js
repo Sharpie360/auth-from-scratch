@@ -4,13 +4,21 @@
 // RabbitWerks Javascript
 
 const express = require('express')
+const volleyball = require('volleyball')
+
 const app = express()
+const auth = require('./auth/index')
+
+
+app.use(volleyball)
 
 app.get('/', (req, res) => {
   res.json({
     message: "Hello world from port 7777!"
   })
 })
+
+app.use('/auth', auth)
 
 function notFound(req, res, next) {
   res.status(404)
