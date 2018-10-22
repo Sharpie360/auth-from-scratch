@@ -13,6 +13,8 @@ router.get('/', (req, res) => {
 // POST/auth/signup
 
 router.post('/signup', (req, res) => {
+  console.log('body', req.body)
+
   res.json({
     message: 'You have signed up'
   })
