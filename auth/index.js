@@ -1,6 +1,14 @@
 const express = require('express')
-
 const router = express.Router()
+const Joi = require('joi')
+
+
+const schema = Joi.object().keys({
+  username: Joi.string().alphanum().min(3).max(30).required(),
+  password: Joi.string().min(6).required()
+});
+
+
 
 // any route in here is pre-pended with /auth
 
@@ -14,10 +22,8 @@ router.get('/', (req, res) => {
 
 router.post('/signup', (req, res) => {
   console.log('body', req.body)
-
-  res.json({
-    message: 'You have signed up'
-  })
+  const result = Joi.validate(req.body, schema)
+  res.json(result)
 })
 
 
