@@ -4,8 +4,8 @@ const Joi = require('joi')
 
 
 const schema = Joi.object().keys({
-  username: Joi.string().alphanum().min(3).max(30).required(),
-  password: Joi.string().min(6).required()
+  username: Joi.string().regex(/(^[a-zA-Z0-9_]+$)/).min(3).max(30).required(),
+  password: Joi.string().min(10).required()
 });
 
 
