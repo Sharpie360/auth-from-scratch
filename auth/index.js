@@ -14,7 +14,7 @@ const router = express.Router()
 // Validation Schema
 const schema = Joi.object().keys({
   username: Joi.string().regex(/(^[a-zA-Z0-9_]+$)/).min(3).max(30).required(),
-  password: Joi.string().min(10).required()
+  password: Joi.string().trim().min(10).required()
 });
 
 
@@ -47,10 +47,21 @@ router.post('/signup', (req, res, next) => {
         next(error)
       } else {
         // hash the password
-        // insert the user witht he hashed password
-
+        // insert the user with the hashed password
+        bcrypt.hash(req.body.password, 12)
+          .then(hashedPassword => {
+            const newUser = {
+              username: req.body.username,
+              password: hashedPassword
+            }
+            users.insert(newUser).then(insertedUser => {
+              delete insertedUser.password
+              res.json(insertedUser)
+            })
+            
+          })
       }
-      res.json({ user })
+      //res.json({ user })
     })
   } else {
     // throw error from express
