@@ -5,4 +5,8 @@
 -----
 ### RabbitWerks.js
 ----
-
+#### VENM Stack
+- Vue.js
+- Express
+- Node.js
+- MongoDB
