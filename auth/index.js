@@ -14,7 +14,7 @@ const router = express.Router()
 // Validation Schema
 const schema = Joi.object().keys({
   username: Joi.string().regex(/(^[a-zA-Z0-9!#$%^&*_-]+$)/).min(3).max(20).required(),
-  password: Joi.string().trim().min(10).required()
+  password: Joi.string().trim().min(6).required()
 });
 
 
@@ -30,7 +30,6 @@ router.get('/', (req, res) => {
 // POST/auth/signup
 
 router.post('/signup', (req, res, next) => {
-  console.log('body', req.body)
   // validate the request body
   const result = Joi.validate(req.body, schema)
   // if NO error, search for existing credentials : user
@@ -44,6 +43,7 @@ router.post('/signup', (req, res, next) => {
       if(user){
         // this user name already exists in db
         const error = new Error('That username is already claimed. Please choose another one.')
+        res.status(409)
         next(error)
       } else {
         // hash the password
@@ -65,6 +65,7 @@ router.post('/signup', (req, res, next) => {
     })
   } else {
     // throw error from express
+    res.status(422)
     next(result.error)
   }
 })
