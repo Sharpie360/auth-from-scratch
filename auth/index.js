@@ -61,13 +61,18 @@ router.post('/signup', (req, res, next) => {
             
           })
       }
-      //res.json({ user })
     })
   } else {
     // throw error from express
     res.status(422)
     next(result.error)
   }
+});
+
+router.post('login', (req, res, next) => {
+  res.json({
+    messgae: 'dinglefritz'
+  })
 })
 
 
