@@ -2,6 +2,7 @@
 const express = require('express')
 const Joi = require('joi')
 const bcrypt = require('bcryptjs')
+const webToken = require('jsonwebtoken')
 
 // db
 const db = require('../db/connection')
@@ -27,8 +28,9 @@ router.get('/', (req, res) => {
   })
 })
 
-// POST/auth/signup
 
+// SIGNUP ROUTE
+// POST /auth/signup
 router.post('/signup', (req, res, next) => {
   // validate the request body
   const result = Joi.validate(req.body, schema)
@@ -58,7 +60,6 @@ router.post('/signup', (req, res, next) => {
               delete insertedUser.password
               res.json(insertedUser)
             })
-            
           })
       }
     })
@@ -69,10 +70,45 @@ router.post('/signup', (req, res, next) => {
   }
 });
 
-router.post('login', (req, res, next) => {
-  res.json({
-    messgae: 'dinglefritz'
-  })
+
+function responseError422(res, next){
+  res.status(422)
+  const error = new Error('Your entries are not valid!')
+  next(error)
+}
+
+// LOGIN ROUTE
+// POST /auth/login
+router.post('/login', (req, res, next) => {
+  // validate request body
+  const result = Joi.validate(req.body, schema)
+
+  // if no error in validation
+  if (result.error === null){
+    users.findOne({
+      username: req.body.username
+    }).then(user => {
+      if (user) {
+        //found the username in the db : user exists
+        bcrypt.compare(req.body.password, user.password)
+          .then(isCorrect => {
+            if (isCorrect){
+              res.json({
+                message: 'Logged in!'
+              })
+            } else {
+              responseError422(res, next)
+            }
+        })
+      } else {
+        responseError422(res, next)
+      }
+    })
+
+  // error in validation
+  } else {
+    responseError422(res, next)
+  }
 })
 
 
