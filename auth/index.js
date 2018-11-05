@@ -3,6 +3,8 @@ const express = require('express')
 const Joi = require('joi')
 const bcrypt = require('bcryptjs')
 const webToken = require('jsonwebtoken')
+require('dotenv').config()
+
 
 // db
 const db = require('../db/connection')
@@ -93,8 +95,19 @@ router.post('/login', (req, res, next) => {
         bcrypt.compare(req.body.password, user.password)
           .then(isCorrect => {
             if (isCorrect){
-              res.json({
-                message: 'Logged in!'
+              // generate JSON webtoken
+              const payload = {
+                _id: user._id,
+                username: user.username,
+              }
+              webToken.sign(payload, process.env.TOKEN_SECRET, { expiresIn: '1d'}, (err, token) => {
+                if (err) {
+                  responseError422(res, next)
+                } else {
+                  res.json({
+                    token
+                  })
+                }
               })
             } else {
               responseError422(res, next)
