@@ -7,7 +7,11 @@ const express = require('express')
 const volleyball = require('volleyball')
 const cors = require('cors')
 
+require('dotenv').config()
+
 const app = express()
+
+const middlewares = require('./auth/middlewares')
 const auth = require('./auth/index')
 
 
@@ -16,10 +20,12 @@ app.use(cors({
   origin: 'http://localhost:8080'
 }))
 app.use(express.json())
+app.use(middlewares.checkTokenSetUser)
 
 app.get('/', (req, res) => {
   res.json({
-    message: "Hello world from port 7777!"
+    message: "Hello world from port 7777!",
+    user: req.user
   })
 })
 
