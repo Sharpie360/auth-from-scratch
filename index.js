@@ -13,11 +13,12 @@ const app = express()
 
 const middlewares = require('./auth/middlewares')
 const auth = require('./auth/index')
+const notes = require('./api/notes')
 
 
 app.use(volleyball)
 app.use(cors({
-  origin: 'http://localhost:8080'
+  origin: ['http://localhost:8080', 'http://192.168.5.135:8080']
 }))
 app.use(express.json())
 app.use(middlewares.checkTokenSetUser)
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/auth', auth)
+// app.use('./api/v1/notes', notes)
 
 function notFound(req, res, next) {
   res.status(404)
