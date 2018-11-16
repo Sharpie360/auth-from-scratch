@@ -20,7 +20,11 @@ const router = express.Router();
 
 // GET api/v1/notes
 router.get('/', (req, res) => {
-  res.json([]);
+  notes.find({
+    user_id: req.user._id
+  }).then(notes => {
+    res.json(notes)
+  })
 });
 // POST api/v1/notes
 router.post('/', (req, res, next) => {
