@@ -41,7 +41,11 @@ function createTokenSendResponse(user, res, next) {
         responseError422(res, next);
       } else {
         res.json({
-          token
+          token,
+          userData: {
+            userID: user._id,
+            username: user.username
+          }
         });
       }
     }
