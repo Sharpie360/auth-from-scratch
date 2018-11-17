@@ -46,6 +46,21 @@ router.post('/', (req, res, next) => {
   }
 });
 
+// POST /rm/_id
+router.post('/rm/', (req, res, next) => {
+  
+  console.log(req.body)
+  if(notes.findOne(req.body)){
+    console.log('found')
+    notes.remove(req.body)
+  } else {
+    const error = new Error('note not found, try again')
+    next(error)
+  }
+  next()
+})
+
+
 module.exports = {
   router
 };
